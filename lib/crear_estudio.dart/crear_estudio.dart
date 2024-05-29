@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'dart:js_interop';
 // import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -94,27 +95,32 @@ class _CrearEstudioState extends State<CrearEstudio> {
     );
 
     if (result != null) {
-      PlatformFile file = result.files.first;
-      Uint8List? bytes = file.bytes;
-      // var xd = file.path;
-      // var bytes = File(xd!).readAsBytesSync();
-      var excel = Excel.decodeBytes(bytes!);
+      try {
+        PlatformFile file = result.files.first;
+        Uint8List? bytes = file.bytes;
+        // var xd = file.path;
+        // var bytes = File(xd!).readAsBytesSync();
+        var excel = Excel.decodeBytes(bytes!);
 
-      for (var table in excel.tables.keys) {
-        print(table); //sheet Name
-        print(excel.tables[table]!.maxCols);
-        print(excel.tables[table]!.maxRows);
-        for (var row in excel.tables[table]!.rows) {
-          int numeros = row[0]!.value;
-          print(numeros);
-          numbers.add(numeros);
+        for (var table in excel.tables.keys) {
+          print(table); //sheet Name
+          print(excel.tables[table]!.maxCols);
+          print(excel.tables[table]!.maxRows);
+          for (var row in excel.tables[table]!.rows) {
+            if (row[0]?.value != null) {
+              int numeros = row[0]!.value;
+              numbers.add(numeros);
+            }
+          }
         }
+        setState(() {
+          fileName = file.name;
+          faltaArchivo = false;
+        });
+        generarMap();
+      } catch (e) {
+        print(e);
       }
-      setState(() {
-        faltaArchivo = false;
-        fileName = file.name;
-      });
-      generarMap();
     }
   }
 

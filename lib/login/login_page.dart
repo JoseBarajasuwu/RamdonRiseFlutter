@@ -168,7 +168,7 @@ class _LoginState extends State<Login> {
                           },
                           inputFormatters: [
                             FilteringTextInputFormatter.deny(
-                                RegExp(r'[|!"${}%&\\=?¿¡]')),
+                                RegExp(r'[|!"{}%\\=?¿¡]')),
                           ],
                           onFieldSubmitted: (value) => {login(usuario, contra)},
                           decoration: InputDecoration(
